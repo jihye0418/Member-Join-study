@@ -28,6 +28,8 @@ System.out.println("LoginSuccess.jsp의 mem_id=>" + mem_id);
 	<b><%=mem_id %></b>님 환영합니다 :)<p>
 	당신은 제한된 기능을 사용할 수 있습니다.<p>
 	<a href="LogOut.jsp">로그아웃</a>
+	<a href="MemberUpdate.jsp">회원수정</a>
+	<a href="DelCheckForm.jsp?mem_id=<%=mem_id%>">회원탈퇴</a>
 <%} else{%>
   <br><br><br>
   <!-- 로그인 안된 상태 -->
