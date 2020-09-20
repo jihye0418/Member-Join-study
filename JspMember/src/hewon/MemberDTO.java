@@ -10,7 +10,7 @@ public class MemberDTO {
 	private String mem_name; //회원명
 	private String mem_email; //이메일
 	private String mem_phone; //전화번호
-	private String mem_zipcaode; //우편번호
+	private String mem_zipcode; //우편번호
 	private String mem_address; //주소
 	private String mem_job; //직업
 	
@@ -44,11 +44,11 @@ public class MemberDTO {
 	public void setMem_phone(String mem_phone) {
 		this.mem_phone = mem_phone;
 	}
-	public String getMem_zipcaode() {
-		return mem_zipcaode;
+	public String getMem_zipcode() {
+		return mem_zipcode;
 	}
-	public void setMem_zipcaode(String mem_zipcaode) {
-		this.mem_zipcaode = mem_zipcaode;
+	public void setMem_zipcode(String mem_zipcaode) {
+		this.mem_zipcode = mem_zipcaode;
 	}
 	public String getMem_address() {
 		return mem_address;

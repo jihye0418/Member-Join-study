@@ -113,21 +113,84 @@ public class MemberDAO {  //has a관계
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	4) 회원가입 기능
 
-//	5) 회원정보 수정 전 특정 회원의 정보 검색
+	/*
+	 * insert, update, delete -> 매개변수O, 반환값X 
+	 * where 조건식이 있다? -> 매개변수O
+	 */
+	//	4) 회원가입 기능
+	//회원가입-> 방법1) insert into member values(?,?,?,?,?,?,?,?); //-> 필드의 모든 것을 입력받아야 하는 경우에 사용
+	//             방법2) insert into member(필드명1, 필드명2,,,,) values(?,?..);
+	public boolean memberInsert(MemberDTO mem) { //call by reference
+		boolean check = false; //회원가입 성공유무
+		
+		try {
+			con = pool.getConnection();
+			con.setAutoCommit(false); //con.commit()을 사용하기 전까지 insert, update, delete X
+			
+			sql="insert into member values(?,?,?,?,?,?,?,?)"; //필드의 모든 값 받아옴
+			pstmt = con.prepareStatement(sql); //연결객체 얻어옴
+			pstmt.setString(1, mem.getMem_id()); //mem.set_mem_id("kkk");     //<->getter
+			pstmt.setString(2, mem.getMem_passwd()); //암호
+			pstmt.setString(3, mem.getMem_name()); //이름
+			pstmt.setString(4, mem.getMem_email()); //이메일
+			pstmt.setString(5, mem.getMem_phone()); //전번
+			pstmt.setString(6, mem.getMem_zipcode()); //우편번호
+			pstmt.setString(7, mem.getMem_address()); //주소
+			pstmt.setString(8, mem.getMem_job()); //직업
+			
+			int insert = pstmt.executeUpdate();//반환값 변수 (insert기 때문에 executeUpdate()     //1-> 성공 / 0 -> 실패
+			
+			con.commit(); //실질적인 SQL 실행 (테이블에 저장)
+			
+			if(insert > 0) { //실행했다면
+				check = true;
+			}
+		}catch(Exception e) {
+			System.out.println("memberInsert() 메서드 호출 에러=>" + e);
+		}finally {
+			pool.freeConnection(con, pstmt); //select가 아니기 때문에 result의 값을 가져올 필요는 없다. 
+		}
+		return check; //MemberInsert.jsp가 값을 반환 받음
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	5) 회원정보 수정 전 특정 회원의 정보 검색 -> getMember
 
-//	6) 회원수정 기능
+//	6) 회원수정 메서드
 
 //	7) 회원탈퇴 기능
 
