@@ -65,9 +65,13 @@ function inputCheck(){
 
 //중복ID체크 해주는 자바스크립트함수 선언
 function idCheck(id){
-   
+	url="IdCheck.jsp?mem_id=" + id;
+	window.open(url,"post","width=300, height=150");
 }
 //우편번호를 검색해주는 함수선언
-function zipCheck(){
-    
+function zipCheck(){ //javascript와 jsp의 연결★
+    //우편번호 검색창 띄우기
+	url = "ZipCheck.jsp?check=y" //check=y가 되었을 때는 검색창 , check=n이 되면 결과창
+	window.open(url, "post","left = 400, top=220, width=500, height=300, menubar=no, toolbar=no, status=yes, scrollbars=yes");
+	//툴바, 메뉴바는 필요하지 않다 
 }

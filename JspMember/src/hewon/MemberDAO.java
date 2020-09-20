@@ -11,10 +11,10 @@ public class MemberDAO {  //has a관계
 	private DBConnectionMgr pool = null; //DB에 미리 연결해서 대기.(연결 요청이 들어오면 연결(connection)을 빌려주고 종료되면 pool에게 connection반납함.)
 	//필수======================================
 	private Connection con = null; //자바를 DB에 연결하기
-	private PreparedStatement pstmt = null; //sql문장을 실행하기 위해 필요 (SQL문장 실행하고 결과를 반환하는 기능을 캡슐화한 인터페이스)
+	private PreparedStatement pstmt = null; //SQL문장을 실행하기 위해 필요
 	private ResultSet rs = null; //select 구문 처리할 때 필요(select 결과를 담음-> SQL 실행 후 결과값)
 	//=========================================
-	private String sql = null; //공통의 sql구문 처리하기 위해 필요(SQL은 여기에 작성)
+	private String sql = null; //공통의 SQL구문 처리하기 위해 필요(SQL은 여기에 작성)
 	
 	
 	//has a 관계 성립 조건2. 생성자를 통해서 객체를 생성한다.
@@ -37,13 +37,13 @@ public class MemberDAO {  //has a관계
 		//② 실행시킬 SQL구문 필요
 			//SQL구문은 예외처리가 필요하다.
 		try {
-			con=pool.getConnection();
+			con=pool.getConnection(); //DB에 연결이 되면 Connection을 빌려준다.
 			System.out.println("con=>" + con);
 			sql="select id,passwd from member where id=? and passwd=?";//어떤 값이 들어올지 모르기 때문에 ? 작성.
-			pstmt=con.prepareStatement(sql);
+			pstmt=con.prepareStatement(sql); //내가 작성한 sql 코드를 DB에 넣어준다.
 			pstmt.setString(1,id); //?의 순서, 입력할 값
 			pstmt.setString(2,passwd);
-			rs=pstmt.executeQuery();
+			rs=pstmt.executeQuery(); //결과값으로 ResultSet의 객체 값을 반환함. (select구문을 수행할 때 사용)
 			check=rs.next(); //데이터가 존재하면 true, 없으면 false값을 check로 받음.
 		}catch(Exception e) {
 			System.out.println("loginCheck()실행중 에러유발=>" + e);
@@ -55,9 +55,70 @@ public class MemberDAO {  //has a관계
 	
 	
 //	2) 중복id체크 기능
+	public boolean idCheck(String id) {
+		boolean idCheck = false;
+		try {
+			con = pool.getConnection();
+			sql="select * from member where id = ?";
+			pstmt = con.prepareStatement(sql); //SQL 문장 DB에 전달
+			pstmt.setString(1,id);
+			rs = pstmt.executeQuery();
+			idCheck = rs.next();
+		}catch(Exception e) {
+			System.out.println("idCheck()실행중 에러유발=>" + e);
+		}
+		return idCheck;
+	}
 
+	
+	
+	
+	
+	
 //	3) 우편번호 검색(실시간 검색)
-
+	public Vector<ZipcodeDTO> zipcodeRead(String area3){
+		Vector<ZipcodeDTO> vecList = new Vector();
+		
+		try {
+			con = pool.getConnection(); //객체 가져옴
+			//SQL 구문
+			//sql = "select* from zipcode where area3 like '%중동%'";
+			sql = "select* from zipcode where area3 like'" + area3+"%'";
+			pstmt = con.prepareStatement(sql); //SQL 문장 DB에 전달
+			rs = pstmt.executeQuery();
+			
+			//검색된 레코드 개수만큼 찾은 데이터가 있으면 ZipcodeDTO에 담아라
+			while(rs.next()) {
+				//어디에 담아? -> ZipcodeDTO에 필드별로 저장 => rs.getString("필드명"); ==> setter에 필드별로 저장
+				ZipcodeDTO tempZipcode = new ZipcodeDTO();
+				tempZipcode.setZipcode(rs.getString("zipcode")); //우편번호
+				tempZipcode.setArea1(rs.getString("area1"));
+				tempZipcode.setArea2(rs.getString("area2"));
+				tempZipcode.setArea3(rs.getString("area3"));
+				tempZipcode.setArea4(rs.getString("area4"));
+				
+				//백터에 추가
+				vecList.add(tempZipcode); //여러개 담을 때는 꼭 vector나 ArrayList에 담아야 함 (검색결과가 많으면 저장할 필요가 있다.)
+			}
+		}catch(Exception e) {
+			System.out.println("zipcodeRead() 에러=>" + e);
+		}finally {
+			pool.freeConnection(con, pstmt, rs); //자동으로 메모리 해제
+		}
+		return vecList;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 //	4) 회원가입 기능
 
 //	5) 회원정보 수정 전 특정 회원의 정보 검색

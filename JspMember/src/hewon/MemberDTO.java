@@ -13,6 +13,7 @@ public class MemberDTO {
 	private String mem_zipcaode; //快祈锅龋
 	private String mem_address; //林家
 	private String mem_job; //流诀
+	
 	public String getMem_id() {
 		return mem_id;
 	}
