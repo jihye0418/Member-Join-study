@@ -3,7 +3,7 @@
 <head>
 <title>회원가입</title>
 <link href="style.css" rel="stylesheet" type="text/css">
-<script language="JavaScript" src="script.js"></script>
+<script language="JavaScript" src="script.js?ver=1"></script>
 </head>
 <body bgcolor="#996600" onLoad="regForm.mem_id.focus()">
 <br><br>
@@ -17,7 +17,8 @@
           </tr>
           <tr> 
             <td width="16%">아이디</td>
-            <td width="57%"> <input type="text" name="mem_id" size="15">
+            <td width="57%"> 
+              <input type="text" name="mem_id" size="15">
 		      <input type="button" value="ID중복확인" onClick="idCheck(this.form.mem_id.value)"></td>
             <td width="27%">아이디를 적어 주세요.</td>
           </tr>

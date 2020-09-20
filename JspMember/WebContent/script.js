@@ -64,10 +64,19 @@ function inputCheck(){
 }
 
 //중복ID체크 해주는 자바스크립트함수 선언
-function idCheck(id){
-	url="IdCheck.jsp?mem_id=" + id;
-	window.open(url,"post","width=300, height=150");
+function idCheck(id){ //함수명 확인
+	if(id == ""){ //값을 입력하지 않았다면
+		alert("아이디를 먼저 입력하세요.");
+		document.regForm.mem_id.focus() //refForm(폼 이름)의 mem_id에 포커스를 줘라.
+	}else{
+		url="IdCheck.jsp?mem_id=" + id;
+		window.open(url,"post","width=300, height=150");
+		//window.open()불러올 변수명, 창의 이름, 창의 옵션)
+	}
 }
+
+
+
 //우편번호를 검색해주는 함수선언
 function zipCheck(){ //javascript와 jsp의 연결★
     //우편번호 검색창 띄우기

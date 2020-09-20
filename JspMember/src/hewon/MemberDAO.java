@@ -55,19 +55,23 @@ public class MemberDAO {  //has a관계
 	
 	
 //	2) 중복id체크 기능
-	public boolean idCheck(String id) {
-		boolean idCheck = false;
+	public boolean checkId(String id) {
+		boolean check = false; //중복 계정의 존재 유무 (처음에는 없는 것으로 간주)
+		
+		//DB연결 (-> 예외처리 필요)
 		try {
-			con = pool.getConnection();
-			sql="select * from member where id = ?";
-			pstmt = con.prepareStatement(sql); //SQL 문장 DB에 전달
-			pstmt.setString(1,id);
-			rs = pstmt.executeQuery();
-			idCheck = rs.next();
+			con = pool.getConnection();//연결객체 얻어옴
+			sql = "select id from member where id=?"; //?를 썼다는 것은 prepareStatement를 쓰겠다
+			pstmt = con.prepareStatement(sql); //sql문에 들어갈 pstmt를 얻어옴
+			pstmt.setString(1,id);//문자를 넣을때는 setString  (웹상에서 입력 받은 중복id값) (?를 썼으니 거기에 들어갈 변수를 써야한다)
+			rs=pstmt.executeQuery(); //ResultSet 객체에 결과값을 담음
+			check = rs.next(); //rs.next()가 true면 중복계정 존재, false면 중복계정 없어 사용 가능. (-> 컬렉션 부분 다시 확인하기!)
 		}catch(Exception e) {
-			System.out.println("idCheck()실행중 에러유발=>" + e);
+			System.out.println("checkId()메서드 호출 에러=>" + e);
+		}finally {
+			pool.freeConnection(con, pstmt, rs);//문제를 처리하고 나서 빠져나갈 구문(메모리 해제)
 		}
-		return idCheck;
+		return check;//boolean으로 했기 때문에 반환값이 있어야 한다.
 	}
 
 	
