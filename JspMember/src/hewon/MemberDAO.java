@@ -228,8 +228,52 @@ public class MemberDAO {  //has a관계
 }
 	
 	
-//	7) 회원탈퇴 기능
-
+//	7) 회원탈퇴 기능  
+	public int deleteMember(String id, String passwd) {//boolean으로 해도 되고 int형으로 해도 됨
+		//--> id는 삭제하기 위해 필요, passwd는 본인인증을 위해 필요.
+		//sql문장이 2개가 나올 때는 트랜잭션 처리를 해야 한다.
+		String dbpasswd = ""; //DB상에서 찾은 암호를 저장할 변수 dbpasswd (웹 상에 입력한 값과 DB에 저장되어 있는 값을 비교해야 함)
+		int x = -1; //회원 탈퇴 유무
+		
+		try {
+			con = pool.getConnection(); //항상 connection객체를 얻어온다.
+			//SQL구문
+			con.setAutoCommit(false);//트랜잭션 처리
+			
+			//1. id값에 해당되는 암호 찾기
+			pstmt = con.prepareStatement("select passwd from member where id=?"); //본인 확인을 한다.
+			pstmt.setString(1, id); //hidden객체로 넘길거다.
+			rs = pstmt.executeQuery(); //rs는 true/false중 하나가 된다.
+			
+			//암호가 존재한다면
+			if(rs.next()) {
+				dbpasswd = rs.getString("passwd"); //passwd의 값을 dbpasswd에 저장한다.
+				//rs.getString(1);로 해도 된다. -> 하지만 명확하게 필드명을 적는 것이 좋다.
+				System.out.println("dbpasswd =>" + dbpasswd);
+				
+				//dbpasswd(DB에서 찾은 암호) == passwd(웹상에 입력한 암호)
+				if(dbpasswd.contentEquals(passwd)) { //암호가 일치한다면
+					pstmt = con.prepareStatement("delete from member where id=?");//객체도 변수기 때문에 새로운 값을 넣을 수 있다.
+					pstmt.setString(1, id);
+					int delete = pstmt.executeUpdate(); //1이냐 0이냐 따져야한다.
+					con.commit();
+					System.out.println("delete(회원탈퇴 성공 유무)=>" + delete);
+					x=1; //회원탈퇴 성공
+				}else {
+					x=0; //회원탈퇴 실패 (암호가 틀린 경우)
+				}
+			}//--암호 존재시
+			else { //암호가 없다면(암호를 못찾은 경우)
+				x=-1;
+			}
+		}catch(Exception e){
+			System.out.println("deleteMember()호출 에러 유발 =>" + e);
+		}finally {
+			//메모리 해제 - 삭제하기 위해서는 먼저 select를 하고 delete를 해야 한다.
+			pool.freeConnection(con, pstmt, rs); //con, pstmt, rs(result) 해제 
+		}
+		return x;
+	}
 	
 	
 	
