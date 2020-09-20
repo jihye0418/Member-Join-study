@@ -13,8 +13,10 @@ function loginCheck(){
 	document.login.submit();
 }
 
+//회원가입버튼 눌렀을 때 agreement.jsp로 이동
 function memberReg(){
-	
+	//document.location = "경로포함한 이동할 페이지명"
+	document.location="agreement.jsp"
 }
 
 function inputCheck(){

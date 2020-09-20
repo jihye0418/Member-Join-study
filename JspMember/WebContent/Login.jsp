@@ -51,8 +51,7 @@ System.out.println("LoginSuccess.jsp의 mem_id=>" + mem_id);
      <TR>
 		<TD colspan="2"><div align="center">
 		<INPUT TYPE="button" value="로그인" onclick="loginCheck()">&nbsp;
-		<INPUT TYPE="button" value="회원가입"
-		onclick="memberReg()">
+		<INPUT TYPE="button" value="회원가입" onclick="memberReg()">
 		</div>
 		</TD>
      </TR>

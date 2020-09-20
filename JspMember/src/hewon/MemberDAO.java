@@ -129,7 +129,7 @@ public class MemberDAO {  //has a관계
 			con = pool.getConnection();
 			con.setAutoCommit(false); //con.commit()을 사용하기 전까지 insert, update, delete X
 			
-			sql= "into member values(?,?,?,?,?,?,?,?)"; //필드의 모든 값 받아옴
+			sql= "insert into member values(?,?,?,?,?,?,?,?)"; //필드의 모든 값 받아옴
 			pstmt = con.prepareStatement(sql); //연결객체 얻어옴
 			pstmt.setString(1, mem.getMem_id()); //mem.set_mem_id("kkk");     //<->getter
 			pstmt.setString(2, mem.getMem_passwd()); //암호
